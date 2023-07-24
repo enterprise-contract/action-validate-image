@@ -1,0 +1,39 @@
+#
+# To use this policy with the ec command line:
+#   ec validate image \
+#     --image $IMAGE \
+#     --public-key key.pub \
+#     --policy github.com/enterprise-contract/config//slsa3
+#
+# To use with an RHTAP Enterprise Contract Integration Test CR:
+#   ...
+#   spec:
+#     params:
+#     - name: POLICY_CONFIGURATION
+#       value: github.com/enterprise-contract/config//slsa3
+#     ...
+#
+description: >-
+  The minimal rules plus the rules for levels 1, 2 & 3 of SLSA v0.1.
+
+publicKey: "k8s://tekton-chains/public-key"
+
+sources:
+  - name: Default
+    policy:
+      - github.com/enterprise-contract/ec-policies//policy/lib
+      - github.com/enterprise-contract/ec-policies//policy/release
+    data:
+      - github.com/enterprise-contract/ec-policies//data
+
+configuration:
+  include:
+    - '@minimal'
+    - '@slsa1'
+    - '@slsa2'
+    - '@slsa3'
+
+  exclude:
+    # Exclude step_image_registries for now since it can cause false
+    # positives due to https://issues.redhat.com/browse/OCPBUGS-8428
+    - step_image_registries
