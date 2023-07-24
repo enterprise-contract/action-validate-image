@@ -1,0 +1,29 @@
+name: 'EC-validator'
+description: 'To run ec against a particular container image built by RHTAP'
+
+inputs:
+  image:
+    description: 'The image reference'
+    required: true
+    default: '-999'
+
+  key:
+    description: 'The public key for verifying signatures'
+    required: true
+    default: '-999'
+
+  policy:
+    description: 'A policy configuration file which determines what policies are to be applied'
+    required: true
+    default: '-999'
+
+runs:
+  using: 'composite'
+
+  steps:
+
+    - name: Run EC validator
+      uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
+      with:
+        args: |
+          validate image --image "$inputs.image" --public-key "$inputs.key" --policy policy.yaml --output yaml
