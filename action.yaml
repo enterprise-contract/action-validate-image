@@ -22,7 +22,7 @@ runs:
 
   steps:
     - name: Export input.key to key.pem
-      run: echo "$inputs.key" > key.pem
+      run: echo "$inputs.key" 
       shell: bash 
 
     - name: Run EC validator
