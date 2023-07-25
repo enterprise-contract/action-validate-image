@@ -21,9 +21,11 @@ runs:
   using: 'composite'
 
   steps:
+    - name: Export input.key to key.pem
+        run: echo "${{ inputs.key }}" > key.pem
 
     - name: Run EC validator
       uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
       with:
         args: |
-          validate image --image "$inputs.image" --public-key "$inputs.key" --policy policy.yaml --output yaml
+          validate image --image "$inputs.image" --public-key /key.pem --policy policy.yaml --output yaml
