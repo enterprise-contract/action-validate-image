@@ -29,4 +29,4 @@ runs:
       uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
       with:
         args: |
-          validate image --image "$inputs.image" --public-key /key.pem --policy policy.yaml --output yaml
+          validate image --image "${{ inputs.image }}" --public-key "${{ inputs.key }}" --policy policy.yaml --output yaml
