@@ -22,7 +22,8 @@ runs:
 
   steps:
     - name: Export input.key to key.pem
-        run: echo "$inputs.key" > key.pem
+      run: echo "$inputs.key" > key.pem
+      shell: bash 
 
     - name: Run EC validator
       uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
