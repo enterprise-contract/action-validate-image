@@ -1,28 +1,34 @@
 
-# EC-action-verifier
+# Action Validate Image
 
-EC to be a general purpose tool for people who want to build their software securely. It Validate conformance of container images with the Enterprise Contract.
-## Documentation
+"Validate" is a custom GitHub Action made by Enterprise Contract that validates container images for security and compliance. It performs a three-stage validation process:
 
-[EC Documentation](https://enterprisecontract.dev/)
+1. **Signature Verification:** Checks if the image is signed and verifies the signature with a provided public key.
+
+2. **Attestation Verification:** Ensures the image has signed and valid attestations, providing additional information about its source.
+
+3. **Policy Conformance Verification:** Verifies that the image's attestations comply with defined policies, ensuring adherence to organizational standards.
+
+* [Read more](https://enterprisecontract.dev/docs/ec-cli/main/ec_validate_image.html#_synopsis) 
+* [Read more](https://redhat-appstudio.github.io/book/book/enterprise-contract.html#:~:text=EC%20CLI,or%20violations%20produced)
+
 
 
 ## Environment Variables
 
 To run this action, you will need to add the following variables to your workflow.
+| Name          | Description                                                                                      | Example                                     |
+|---------------|--------------------------------------------------------------------------------------------------|---------------------------------------------|
+| Public Key    | The public key for verifying signatures.                                                | `"your_public_key_goes_here"`                 |
+| Policy        | The location of the policy.yaml config file to be used when running Enterprise Contract. A list of standard configs can be found at [here](https://github.com/enterprise-contract/config).  | `"github.com/enterprise-contract/config//slsa3"` |
+| Image         | Image that is built.                                                                            | `"quay.io/redhat-appstudio/ec-golden-image:latest"` |
 
-`public key` Is done with using github variables using github e.g. ` ${{ vars.PUBLIC_KEY }}`  [github tutorial](https://docs.github.com/en/actions/learn-github-actions/variables)
-
-`Policy` A list of policy that can be used can be found at [Policy's](https://github.com/enterprise-contract/config) e.g. `"github.com/enterprise-contract/config//minimal"`
-
-
-`Image` Image that is built e.g.`"quay.io/redhat-appstudio/ec-golden-image:latest"`
 
 
 ## Usage/Examples
 
 ```javascript
-name: TEST REPO
+name: example of action validate image
 on:
   push:
     branches:
@@ -35,11 +41,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      
-      
+
     - name: Run EC Validator
-      uses: ./
+      uses: enterprise-contract/action-validate-image@v1
       with:
         image: "quay.io/redhat-appstudio/ec-golden-image:latest"
         key: ${{ vars.PUBLIC_KEY }}
-        policy: "github.com/enterprise-contract/config//minimal"
+        policy: "github.com/enterprise-contract/config//default"

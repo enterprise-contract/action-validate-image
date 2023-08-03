@@ -1,20 +1,21 @@
 name: 'EC-validator'
-description: 'To run ec against a particular container image built by RHTAP'
+description: To run ec against a particular container image built by RHTAP
 
 inputs:
   image:
-    description: 'The image reference'
+    description: The image reference
+    required: true
 
   key:
-    description: 'The public key for verifying signatures'
+    description: The public key for verifying signatures
     required: true
 
   policy:
-    description: 'A policy configuration file which determines what policies are to be applied'
-    required: true
+    description: A policy configuration file which determines what policies are to be applied
+    default: github.com/enterprise-contract/config//default
 
 runs:
-  using: 'composite'
+  using: composite
 
   steps:
 
