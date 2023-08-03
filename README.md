@@ -47,4 +47,4 @@ jobs:
       with:
         image: "quay.io/redhat-appstudio/ec-golden-image:latest"
         key: ${{ vars.PUBLIC_KEY }}
-        policy: "https://github.com/enterprise-contract/config/raw/main/slsa3/policy.yaml"
+        policy: "github.com/enterprise-contract/config//default"
