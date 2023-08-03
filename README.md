@@ -20,7 +20,7 @@ To run this action, you will need to add the following variables to your workflo
 | Name          | Description                                                                                      | Example                                     |
 |---------------|--------------------------------------------------------------------------------------------------|---------------------------------------------|
 | Public Key    | The public key for verifying signatures.                                                | `"your_public_key_goes_here"`                 |
-| Policy        | A list of policy that can be used can be found at [Policy's](https://github.com/enterprise-contract/config).  | `"github.com/enterprise-contract/config//minimal"` |
+| Policy        | The location of the policy.yaml config file to be used when running Enterprise Contract. A list of standard configs can be found at [here](https://github.com/enterprise-contract/config).  | `"github.com/enterprise-contract/config//slsa3"` |
 | Image         | Image that is built.                                                                            | `"quay.io/redhat-appstudio/ec-golden-image:latest"` |
 
 
