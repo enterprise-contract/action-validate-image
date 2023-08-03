@@ -1,7 +1,7 @@
 
-# Enterprise Contract Github Action Verifier
+# Action Validate Image
 
-"verifier" is a custom GitHub Action made by Enterprise Contract that validates container images for security and compliance. It performs a three-stage validation process:
+"Validate" is a custom GitHub Action made by Enterprise Contract that validates container images for security and compliance. It performs a three-stage validation process:
 
 1. **Signature Verification:** Checks if the image is signed and verifies the signature with a provided public key.
 
@@ -28,7 +28,7 @@ To run this action, you will need to add the following variables to your workflo
 ## Usage/Examples
 
 ```javascript
-name: TEST REPO
+name: example of action validate image
 on:
   push:
     branches:
@@ -43,7 +43,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Run EC Validator
-      uses: enterprise-contract/actions/verify@v1
+      uses: enterprise-contract/action-validate-image@v1
       with:
         image: "quay.io/redhat-appstudio/ec-golden-image:latest"
         key: ${{ vars.PUBLIC_KEY }}
