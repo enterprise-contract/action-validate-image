@@ -27,6 +27,17 @@ To run this action, you will need to add the following variables to your workflo
 
 ## Usage/Examples
 
+If you're eager to experience the benefits of the "Validate" action in your build process, follow these simple steps to get started. By copying and pasting the example below to your project's `.github/workflows/` directory, you'll be on your way to enhancing your container image security and compliance.
+
+**Copy and Paste:** Insert the example snippet below into your `.github/workflows/` directory.
+
+**Customize Your Parameters:** Tailor the example to your specific needs:
+1. Replace the Image with your image URL or file path within the `image` parameter.
+2. Set up your key using GitHub vars, following recommended practices. Tutorial can be found [here](https://docs.github.com/en/actions/learn-github-actions/variables#creating-configuration-variables-for-a-repository)
+3. Choose a policy that aligns with your requirements and objectives. Policy's can be found [here](https://github.com/enterprise-contract/config)
+
+You are now ready to run the validate action.
+
 ```javascript
 name: example of action validate image
 on:
