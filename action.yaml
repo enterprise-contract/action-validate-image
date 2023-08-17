@@ -2,25 +2,55 @@ name: 'EC-validator'
 description: To run ec against a particular container image built by RHTAP
 
 inputs:
+
+  option:
+    description: Choose either 'keyless' or 'long-lived' validation mode
+    required: true
+    enum:
+      - keyless
+      - long-lived
+
   image:
     description: The image reference
     required: true
 
   key:
     description: The public key for verifying signatures
-    required: true
+    required: false
 
   policy:
     description: A policy configuration file which determines what policies are to be applied
     default: github.com/enterprise-contract/config//default
 
+  identity:
+    description: The identity used to validate the certificate associated with the image
+    required: false
+
+  issuer:
+    description: The OIDC issuer for validation
+    required: false
+
+  
 runs:
   using: composite
 
   steps:
 
-    - name: Run EC validator
+    - name: Run EC validator 
+      if: ${{ inputs.option == 'long-lived' }}
       uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
       with:
         args: |
           validate image --image "${{ inputs.image }}" --public-key "${{ inputs.key }}" --policy "${{ inputs.policy }}"  --output yaml
+
+    - name: Run EC Validate (keyless)
+      if: ${{ inputs.option == 'keyless' }}
+      uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
+      with:
+        args: >
+          validate image 
+          --policy ""
+          --image "${{ inputs.image }}"
+          --certificate-identity-regexp="${{ inputs.identity }}"
+          --certificate-oidc-issuer="${{ inputs.issuer }}"
+          --output yaml 
