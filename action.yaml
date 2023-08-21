@@ -3,16 +3,10 @@ description: To run ec against a particular container image built by RHTAP
 
 inputs:
 
-  option:
-    description: Choose either 'keyless' or 'long-lived' validation mode
-    required: true
-    enum:
-      - keyless
-      - long-lived
 
   image:
     description: The image reference
-    required: true
+    required: truequay.io/redhat-appstudio/ec-golden-image:latest
 
   key:
     description: The public key for verifying signatures
@@ -20,7 +14,7 @@ inputs:
 
   policy:
     description: A policy configuration file which determines what policies are to be applied
-    default: github.com/enterprise-contract/config//default
+    required: false
 
   identity:
     description: The identity used to validate the certificate associated with the image
@@ -36,21 +30,14 @@ runs:
 
   steps:
 
-    - name: Run EC validator 
-      if: ${{ inputs.option == 'long-lived' }}
-      uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
-      with:
-        args: |
-          validate image --image "${{ inputs.image }}" --public-key "${{ inputs.key }}" --policy "${{ inputs.policy }}"  --output yaml
-
-    - name: Run EC Validate (keyless)
-      if: ${{ inputs.option == 'keyless' }}
+    - name: Run EC Validate 
       uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
       with:
         args: >
           validate image 
-          --policy ""
+          --policy "${{ inputs.policy }}"
           --image "${{ inputs.image }}"
+          --public-key "${{ inputs.key }}"
           --certificate-identity-regexp="${{ inputs.identity }}"
           --certificate-oidc-issuer="${{ inputs.issuer }}"
           --output yaml 
