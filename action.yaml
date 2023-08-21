@@ -24,6 +24,10 @@ inputs:
     description: The OIDC issuer for validation
     required: false
 
+  command:
+    description: A ec command to add to your validate action.
+    required: false
+
   
 runs:
   using: composite
@@ -40,4 +44,5 @@ runs:
           --public-key "${{ inputs.key }}"
           --certificate-identity-regexp="${{ inputs.identity }}"
           --certificate-oidc-issuer="${{ inputs.issuer }}"
+          "${{ inputs.command }}"
           --output yaml 
