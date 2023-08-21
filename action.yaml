@@ -6,7 +6,7 @@ inputs:
 
   image:
     description: The image reference
-    required: truequay.io/redhat-appstudio/ec-golden-image:latest
+    required: true
 
   key:
     description: The public key for verifying signatures
