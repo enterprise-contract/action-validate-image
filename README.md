@@ -53,6 +53,12 @@ This authentication approach is the most robust, as Sigstore authentication is b
 
 Ensure to pick the right method for your needs and set up the variables accordingly.
 
+### Optional (extra-params)
+The Enterprise Contract provides a variety of additional options that can seamlessly integrate into this action-validate-image. These extra-params are outlined in the official documentation, which can be found [here](https://enterprisecontract.dev/docs/ec-cli/main/ec_validate_image.html#_options). You have the freedom to incorporate as many as you need. Just simply add `extra-params` into your worflow 
+
+```shell
+extra-params: --ignore-rekor --debug
+```
 ## Usage/Examples
 
 If you're eager to experience the benefits of the "Validate" action in your build process, follow these simple steps to get started. By copying and pasting either 'keyless' or  'long-lived' example below to your project's `.github/workflows/` directory, you'll be on your way to enhancing your container image security and compliance.
@@ -82,6 +88,7 @@ jobs:
         image: "quay.io/redhat-appstudio/ec-golden-image:latest"
         key: ${{ vars.PUBLIC_KEY }}
         policy: "github.com/enterprise-contract/config//default"
+        extra-params: --ignore-rekor
 ```
 
 ### Identity-Based Short-Lived (Keyless) Example
@@ -108,3 +115,4 @@ jobs:
         identity: https:\/\/github\.com\/(slsa-framework\/slsa-github-generator|lcarva\/festoji)\/
         issuer: https://token.actions.githubusercontent.com
 ```
+
