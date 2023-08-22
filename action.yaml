@@ -17,7 +17,7 @@ inputs:
     required: false
 
   identity:
-    description: The identity used to validate the certificate associated with the image
+    description: A regexp string used to match the certificate identity associated with the image
     required: false
 
   issuer:

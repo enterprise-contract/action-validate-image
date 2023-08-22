@@ -4,7 +4,7 @@
 "Validate" is a robust GitHub Action developed by Enterprise Contract, designed to assess container images for security and compliance. This action has two authentication methods: Long-Lived Public-Key Authentication and Keyless Authentication made possible by Enterprise Contract.
 ## Keyless Authentication: The Strongest Approach
 
-Keyless Authentication represts the highest level of Sigstore sophistication. Verification revolves around the signer's identity, It's made possible by  two essential parts:
+Keyless Authentication represents the highest level of Sigstore sophistication. Verification is based on the signer's identity, It's made possible by two essential parts:
 
 - **Certificate Identity:** This identifier is crucial for verifying the image-associated certificate.
 - **Certificate OIDC Issuer:** The OIDC issuer serves a vital role in validating the identity.
@@ -15,7 +15,7 @@ Keyless Authentication significantly enhances security, ensuring image authentic
 
 The Long-Lived Public-Key Authentication method involves a comprehensive three-stage validation process:
 
-1. **Signature Verification:** The action meticulously checks image signatures and validates them using designated public keys.
+1. **Signature Verification:** The action cryptographically verifies image signatures using the provided public key.
 
 2. **Attestation Verification:** It ensures images possess valid and signed attestations, enriching details about image origin and attributes.
 
@@ -47,14 +47,14 @@ This authentication approach is the most robust, as Sigstore authentication is b
 
 | Name          | Description                                                                                      | Example                                     |
 |---------------|--------------------------------------------------------------------------------------------------|---------------------------------------------|
-| Identity      | Identity to verify the certificate linked to the image.                                          | `https:\/\/github\.com\/(slsa-framework\/slsa-github-generator\|lcarva\/festoji)\/`                 |
+| Identity      | A regexp string used to match the certificate identity linked to the image.                                          | `https:\/\/github\.com\/(slsa-framework\/slsa-github-generator\|lcarva\/festoji)\/`                 |
 | Issuer        | OIDC issuer for validation purposes.                                                             | `https://token.actions.githubusercontent.com` |
-| Image         | Image to be built.                                                                               | `quay.io/lucarval/festoji:latest` |
+| Image         | Image to be verified.                                                                               | `quay.io/lucarval/festoji:latest` |
 
 Ensure to pick the right method for your needs and set up the variables accordingly.
 
 ### Optional (extra-params)
-The Enterprise Contract provides a variety of additional options that can seamlessly integrate into this action-validate-image. These extra-params are outlined in the official documentation, which can be found [here](https://enterprisecontract.dev/docs/ec-cli/main/ec_validate_image.html#_options). You have the freedom to incorporate as many as you need. Just simply add `extra-params` into your worflow 
+The Enterprise Contract provides a variety of additional options that can seamlessly integrate into this action-validate-image. These extra-params are outlined in the official documentation, which can be found [here](https://enterprisecontract.dev/docs/ec-cli/main/ec_validate_image.html#_options). You have the freedom to incorporate as many as you need. Just simply add `extra-params` into your worflow.
 
 ```shell
 extra-params: --ignore-rekor --debug
