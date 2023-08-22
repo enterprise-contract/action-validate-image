@@ -2,8 +2,6 @@ name: 'EC-validator'
 description: To run ec against a particular container image built by RHTAP
 
 inputs:
-
-
   image:
     description: The image reference
     required: true
@@ -28,13 +26,10 @@ inputs:
     description: This is to add some extra arguments into ec.
     required: false
 
-
-
 runs:
   using: composite
 
   steps:
-
     - name: Run EC Validate
       uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
       with:
