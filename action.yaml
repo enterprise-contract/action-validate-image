@@ -38,7 +38,7 @@ runs:
           --policy "${{ inputs.policy }}"
           --image "${{ inputs.image }}"
           --public-key "${{ inputs.key }}"
-          --certificate-identity-regexp="${{ inputs.identity }}"
-          --certificate-oidc-issuer="${{ inputs.issuer }}"
+          --certificate-identity-regexp "${{ inputs.identity }}"
+          --certificate-oidc-issuer "${{ inputs.issuer }}"
           ${{ inputs.extra-params }}
           --output yaml
