@@ -2,8 +2,6 @@ name: 'EC-validator'
 description: To run ec against a particular container image built by RHTAP
 
 inputs:
-
-
   image:
     description: The image reference
     required: true
@@ -23,27 +21,24 @@ inputs:
   issuer:
     description: The OIDC issuer for validation
     required: false
-  
+
   extra-params:
     description: This is to add some extra arguments into ec.
     required: false
 
-
-  
 runs:
   using: composite
 
   steps:
-
-    - name: Run EC Validate 
+    - name: Run EC Validate
       uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
       with:
         args: >
-          validate image 
+          validate image
           --policy "${{ inputs.policy }}"
           --image "${{ inputs.image }}"
           --public-key "${{ inputs.key }}"
-          --certificate-identity-regexp="${{ inputs.identity }}"
-          --certificate-oidc-issuer="${{ inputs.issuer }}"
+          --certificate-identity-regexp "${{ inputs.identity }}"
+          --certificate-oidc-issuer "${{ inputs.issuer }}"
           ${{ inputs.extra-params }}
-          --output yaml 
+          --output yaml
