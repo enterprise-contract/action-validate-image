@@ -1,0 +1,23 @@
+name: Release
+
+"on":
+  workflow_run:
+    workflows: [Checks]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create or Update 'latest' EC Validate Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Latest release
+        body: Latest stable release.
+        tag_name: latest
+        generate_release_notes: false
+        draft: false
