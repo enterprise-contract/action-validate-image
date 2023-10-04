@@ -32,6 +32,8 @@ runs:
   steps:
     - name: Run EC Validate
       uses: docker://quay.io/hacbs-contract/ec-cli:snapshot
+      id: ec_validate
+      continue-on-error: true
       with:
         args: >
           validate image
@@ -42,3 +44,13 @@ runs:
           --certificate-oidc-issuer "${{ inputs.issuer }}"
           ${{ inputs.extra-params }}
           --output yaml
+          --output summary-markdown=log.md 
+    
+    - name: Output summary
+      run: cat log.md >> $GITHUB_STEP_SUMMARY
+      shell: bash
+
+    - name: Fail if validate failed
+      if: steps.ec_validate.outcome != 'success'
+      run: exit 1
+      shell: bash 
