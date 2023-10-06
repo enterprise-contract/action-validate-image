@@ -83,11 +83,11 @@ jobs:
 
     steps:
     - name: Run EC Validator
-      uses: enterprise-contract/action-validate-image@v1.1
+      uses: enterprise-contract/action-validate-image@latest
       with:
-        image: "quay.io/redhat-appstudio/ec-golden-image:latest"
+        image: quay.io/redhat-appstudio/ec-golden-image:latest
         key: ${{ vars.PUBLIC_KEY }}
-        policy: "github.com/enterprise-contract/config//default"
+        policy: github.com/enterprise-contract/config//slsa3
         extra-params: --ignore-rekor
 ```
 
@@ -109,7 +109,7 @@ jobs:
 
     steps:
     - name: Run EC Validator
-      uses: enterprise-contract/action-validate-image@v1.1
+      uses: enterprise-contract/action-validate-image@latest
       with:
         image: quay.io/lucarval/festoji:latest
         identity: https:\/\/github\.com\/(slsa-framework\/slsa-github-generator|lcarva\/festoji)\/
