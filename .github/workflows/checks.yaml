@@ -1,0 +1,135 @@
+name: Checks
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  ci: 
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ job.status }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name : Run EC Validate (keyless)
+      uses: ./
+      with:
+        image: ghcr.io/enterprise-contract/golden-container:latest
+        identity: https:\/\/github\.com\/(slsa-framework\/slsa-github-generator|enterprise-contract\/golden-container)\/
+        issuer: https://token.actions.githubusercontent.com
+
+    # # - name : Run EC Validate (Long_Lived)
+    # #   uses: ./
+    # #   with:
+    # #     image: quay.io/redhat-appstudio/ec-golden-image:latest
+    # #     key: ${{ vars.PUBLIC_KEY }}
+    # #     policy: " " #TODO Ignore until image is fixed 
+    # #     extra-params: --ignore-rekor
+
+
+  release:
+    runs-on: ubuntu-latest
+    needs: ci
+    if: needs.ci.outputs.status == 'success' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup GitHub Auth for gh cli
+      run: echo ${{ secrets.GHTOKEN }} | gh auth login --with-token
+    - name: Delete latest release and tag
+      run: |
+        latestTag=$(gh api -H 'Accept: application/vnd.github.v3+json' /repos/${{ github.repository }}/releases/latest -q '.tag_name')
+        latestId=$(gh api -H 'Accept: application/vnd.github.v3+json' /repos/${{ github.repository }}/releases/latest -q '.id')
+        
+        # Delete the latest release
+        gh api --method DELETE -H 'Accept: application/vnd.github.v3+json' "/repos/${{ github.repository }}/releases/${latestId}"
+        
+        # Delete the tag associated with the latest release
+        git push --delete origin $latestTag
+
+        # Find the version tag and then increment new version with v prefix eg. v1.0.1 -> v1.0.2
+        latestVTag=$(gh api -H 'Accept: application/vnd.github.v3+json' /repos/${{ github.repository }}/releases/latest -q '.tag_name')
+        echo "newVersion=v$(echo ${latestVTag#v} | awk -F. '{$NF = $NF + 1;} 1' OFS=.)" >> $GITHUB_ENV
+    
+    - name: Create New Version Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Latest Version ${{ env.newVersion }} Release
+        body: sha is ${{ github.sha }}
+        tag_name: ${{ env.newVersion }}
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+        
+    - name: Create or Update 'latest' EC Validate Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Latest Release 
+        body: Latest stable release.
+        tag_name: latest
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+
+  # after a new release is created, trigger the golden release workflow which will now use the new ec-validate action 
+  Golden-Release-Workflow:
+    runs-on: ubuntu-latest
+    needs: [ci, release]
+    env:
+      repo: "https://api.github.com/repos/enterprise-contract/golden-container"
+      auth_header: "Authorization: token ${{ secrets.GHTOKEN }}"
+      accept_header: "Accept: application/vnd.github.v3+json"
+    steps:
+      - name: Trigger and Wait for Golden Release Workflow
+        run: |
+          # Trigger the Golden Release Workflow
+          curl -X POST \
+            -H "${{ env.auth_header }}" \
+            -H "${{ env.accept_header }}" \
+            "$repo/dispatches" \
+            -d '{"event_type": "release"}'
+          
+          sleep 30
+
+          # Get latest workflow id
+          runs_response=$(curl -X GET \
+            -H "${{ env.auth_header }}" \
+            -H "${{ env.accept_header }}" \
+            "$repo/actions/runs")
+          
+          workflow_run_id=$(echo "$runs_response" | jq '[.workflow_runs[] | select(.status != "completed")][0].id')
+
+          # Monitor the workflow for success or failure
+          while : ; do
+            status_response=$(curl -X GET \
+              -H "${{ env.auth_header }}" \
+              -H "${{ env.accept_header }}" \
+              "$repo/actions/runs/$workflow_run_id")
+            
+            status=$(echo "$status_response" | jq -r '.status')
+            conclusion=$(echo "$status_response" | jq -r '.conclusion')
+
+            if [[ "$status" == "completed" ]]; then
+              echo "Workflow has $conclusion"
+              if [[ "$conclusion" == "failure" ]]; then
+                echo "Exiting due to workflow failure."
+                exit 1
+              fi
+              break
+            fi
+
+            echo "Workflow is $status. Waiting..."
+            sleep 20
+          done
+
+
+
