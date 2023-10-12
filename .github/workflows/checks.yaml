@@ -1,0 +1,59 @@
+name: Checks
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  ci: 
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ job.status }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name : Run EC Validate (keyless)
+      uses: ./
+      with:
+        image: ghcr.io/enterprise-contract/golden-container:latest
+        identity: https:\/\/github\.com\/(slsa-framework\/slsa-github-generator|enterprise-contract\/golden-container)\/
+        issuer: https://token.actions.githubusercontent.com
+
+    #FIXME Commented out because the golden-image on quay.io is failing due to a violation in the image. 
+    # - name : Run EC Validate (Long_Lived)
+    #   uses: ./
+    #   with:
+    #     image: quay.io/redhat-appstudio/ec-golden-image:latest
+    #     key: ${{ vars.PUBLIC_KEY }}
+    #     policy: github.com/enterprise-contract/config//slsa3
+    #     extra-params: --ignore-rekor
+
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: ci 
+    if: needs.ci.outputs.status == 'success' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    steps:
+    - name: Get Latest Version Tag and Increment 
+      run: |
+        # Find the version tag and then increment new version with v prefix eg. v1.0.1 -> v1.0.2
+        latestVTag=$(gh api -H 'Accept: application/vnd.github.v3+json' /repos/${{ github.repository }}/releases/latest -q '.tag_name')
+        echo "newVersion=v$(echo ${latestVTag#v} | awk -F. '{$NF = $NF + 1;} 1' OFS=.)" >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ github.token }}
+        
+    - name: Create New Version Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: ${{ env.newVersion }} Release
+        body: ""
+        tag_name: ${{ env.newVersion }}
+        generate_release_notes: true
+        draft: false
+        prerelease: false
