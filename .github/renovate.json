@@ -1,0 +1,17 @@
+  {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:base"],
+    "timezone": "America/New_York",
+    "schedule": ["before 10pm"],
+    "automerge": true,
+    "automergeType": "pr",
+    "platformAutomerge": true,
+    "pinDigests": true,
+    "customManagers": [
+      {
+        "fileMatch": ["^\\.github/workflows/checks.yaml$"],
+        "matchStrings": ["image:\\s+(?<depName>ghcr\\.io/.*?):(?<currentValue>.*?)@(?<currentDigest>.*?)\\s"],
+        "datasourceTemplate": "docker"
+      }
+    ]
+  }
