@@ -1,5 +1,5 @@
-name: 'EC-validator'
-description: To run ec against a particular container image built by RHTAP
+name: EC Validate
+description: Validate is a robust GitHub Action developed by Enterprise Contract, designed to assess container images for security and compliance.
 
 inputs:
   image:
