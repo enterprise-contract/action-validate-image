@@ -1,6 +1,8 @@
 name: EC Validate
 description: GitHub Action developed by Enterprise Contract, designed to assess container images for security & compliance.
-
+branding:
+  icon: 'shield'
+  color: 'purple'
 inputs:
   image:
     description: The image reference
