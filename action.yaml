@@ -1,5 +1,5 @@
 name: EC Validate
-description: Validate is a robust GitHub Action developed by Enterprise Contract, designed to assess container images for security and compliance.
+description: GitHub Action developed by Enterprise Contract, designed to assess container images for security & compliance.
 
 inputs:
   image:
