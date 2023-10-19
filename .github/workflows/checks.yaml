@@ -40,11 +40,26 @@ jobs:
     needs: ci 
     if: needs.ci.outputs.status == 'success' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     steps:
-    - name: Get Latest Version Tag and Increment 
+    - name: Get Latest Version Tag and Increment
       run: |
-        # Find the version tag and then increment new version with v prefix eg. v1.0.1 -> v1.0.2
-        latestVTag=$(gh api -H 'Accept: application/vnd.github.v3+json' /repos/${{ github.repository }}/releases/latest -q '.tag_name')
-        echo "newVersion=v$(echo ${latestVTag#v} | awk -F. '{$NF = $NF + 1;} 1' OFS=.)" >> $GITHUB_ENV
+          latestVTag=$(gh api -H 'Accept: application/vnd.github.v3+json' /repos/${{ github.repository }}/releases/latest -q '.tag_name')
+          major=$(echo ${latestVTag#v} | awk -F. '{print $1}')
+          minor=$(echo ${latestVTag#v} | awk -F. '{print $2}')
+          patch=$(echo ${latestVTag#v} | awk -F. '{print $3}')
+          # Increment patch version and figure out if we need to increment minor, major or patch.
+          if [ "$patch" -eq "9" ]; then
+            if [ "$minor" -eq "9" ]; then
+              major=$((major + 1))
+              minor=0
+              patch=0
+            else
+              minor=$((minor + 1))
+              patch=0
+            fi
+          else
+            patch=$((patch + 1))
+          fi
+          echo "newVersion=v$major.$minor.$patch" >> $GITHUB_ENV
       env:
         GH_TOKEN: ${{ github.token }}
         
