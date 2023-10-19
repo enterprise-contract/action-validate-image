@@ -83,7 +83,7 @@ jobs:
 
     steps:
     - name: Run EC Validator
-      uses: enterprise-contract/action-validate-image@latest
+      uses: enterprise-contract/action-validate-image@v1.0.18
       with:
         image: quay.io/redhat-appstudio/ec-golden-image:latest
         key: ${{ vars.PUBLIC_KEY }}
@@ -109,7 +109,7 @@ jobs:
 
     steps:
     - name: Run EC Validator
-      uses: enterprise-contract/action-validate-image@latest
+      uses: enterprise-contract/action-validate-image@v1.0.18
       with:
         image: quay.io/lucarval/festoji:latest
         identity: https:\/\/github\.com\/(slsa-framework\/slsa-github-generator|lcarva\/festoji)\/
