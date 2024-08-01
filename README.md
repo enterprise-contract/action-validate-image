@@ -24,10 +24,10 @@ The Long-Lived Public-Key Authentication method involves a comprehensive three-s
 For more details:
 
 - [Enterprise Contract Documentation](https://enterprisecontract.dev/docs/ec-cli/main/ec_validate_image.html#_synopsis)
-- [Red Hat AppStudio Documentation](https://redhat-appstudio.github.io/book/book/enterprise-contract.html#:~:text=EC%20CLI,or%20violations%20produced)
+- [Konflux-CI Documentation](https://konflux-ci.dev/architecture/architecture/enterprise-contract.html)
 
 
-## Environment Variables 
+## Environment Variables
 
 To use this action, please configure the following environment variables in your workflow based on the desired authentication method.
 
@@ -85,7 +85,7 @@ jobs:
     - name: Run EC Validator
       uses: enterprise-contract/action-validate-image@v1.0.18
       with:
-        image: quay.io/redhat-appstudio/ec-golden-image:latest
+        image: quay.io/konflux-ci/ec-golden-image:latest
         key: ${{ vars.PUBLIC_KEY }}
         policy: github.com/enterprise-contract/config//slsa3
         extra-params: --ignore-rekor
