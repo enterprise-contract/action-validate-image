@@ -33,7 +33,7 @@ runs:
 
   steps:
     - name: Run EC Validate
-      uses: docker://quay.io/enterprise-contract/ec-cli:snapshot@sha256:2b02a364ab8f4bbf54a1cc958023a861c81205bf6ee5d44d2b5fe894096ae429
+      uses: docker://quay.io/enterprise-contract/ec-cli:snapshot@sha256:5638c575403d97be08bdf5d19e6752b7e57947c770dccdb82696155ed77c1e2e
       id: ec_validate
       continue-on-error: true
       with:
