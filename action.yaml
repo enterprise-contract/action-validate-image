@@ -1,5 +1,5 @@
 name: EC Validate
-description: GitHub Action developed by Enterprise Contract, designed to assess container images for security & compliance.
+description: GitHub Action developed by Conforma (formerly Enterprise Contract), designed to assess container images for security & compliance.
 branding:
   icon: 'shield'
   color: 'purple'
