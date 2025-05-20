@@ -20,8 +20,8 @@ jobs:
     - name : Run EC Validate (keyless)
       uses: ./
       with:
-        image: ghcr.io/enterprise-contract/golden-container:latest@sha256:ebe8e551810b066b4b18d42e7140bac1b4286ad8223ae6f8908b5bc411c8007d # latest
-        identity: https:\/\/github\.com\/(slsa-framework\/slsa-github-generator|enterprise-contract\/golden-container)\/
+        image: ghcr.io/conforma/golden-container:latest@sha256:2840b4ac3df88a20b2a8fdf8c51d2cd2a291c9332d33b685e757c608baf64fb9 # latest
+        identity: https:\/\/github\.com\/(slsa-framework\/slsa-github-generator|conforma\/golden-container)\/
         issuer: https://token.actions.githubusercontent.com
 
     #FIXME Commented out because the golden-image on quay.io is failing due to a violation in the image.
