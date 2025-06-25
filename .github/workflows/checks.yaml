@@ -30,7 +30,7 @@ jobs:
     #   with:
     #     image: quay.io/konflux-ci/ec-golden-image:latest
     #     key: ${{ vars.PUBLIC_KEY }}
-    #     policy: github.com/enterprise-contract/config//slsa3
+    #     policy: github.com/conforma/config//slsa3
     #     extra-params: --ignore-rekor
 
   release:

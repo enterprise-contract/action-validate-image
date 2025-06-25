@@ -38,7 +38,7 @@ The Long-Lived public-key method offers a straightforward way to integrate with 
 | Name          | Description                                                                                      | Example                                     |
 |---------------|--------------------------------------------------------------------------------------------------|---------------------------------------------|
 | Public Key    | The public key for verifying signatures.                                                | `your_public_key_goes_here`                 |
-| Policy        | The location of the policy.yaml config file to be used when running Enterprise Contract. A list of standard configs can be found at [here](https://github.com/enterprise-contract/config).  | `github.com/enterprise-contract/config//slsa3` |
+| Policy        | The location of the policy.yaml config file to be used when running Enterprise Contract. A list of standard configs can be found at [here](https://github.com/conforma/config).  | `github.com/conforma/config//slsa3` |
 | Image         | Image that is built.                                                                            | `quay.io/redhat-appstudio/ec-golden-image:latest` |
 
 ### Using Identity-Based Short-Lived (Keyless) Authentication
@@ -68,7 +68,7 @@ If you're eager to experience the benefits of the "Validate" action in your buil
 **Copy and Paste:** Insert the example snippet below into your `.github/workflows/` directory.
 1. Replace the Image with your image URL or file path within the `image` parameter.
 2. Set up your key using GitHub vars, following recommended practices. Tutorial can be found [here](https://docs.github.com/en/actions/learn-github-actions/variables#creating-configuration-variables-for-a-repository)
-3. Choose a policy that aligns with your requirements and objectives. Policy's can be found [here](https://github.com/enterprise-contract/config)
+3. Choose a policy that aligns with your requirements and objectives. Policy's can be found [here](https://github.com/conforma/config)
 Public-Key Authentication)
 ```javascript
 name: example of action validate using long-lived
@@ -87,7 +87,7 @@ jobs:
       with:
         image: quay.io/konflux-ci/ec-golden-image:latest
         key: ${{ vars.PUBLIC_KEY }}
-        policy: github.com/enterprise-contract/config//slsa3
+        policy: github.com/conforma/config//slsa3
         extra-params: --ignore-rekor
 ```
 
